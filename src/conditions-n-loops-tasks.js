@@ -407,8 +407,25 @@ function rotateMatrix(matrix) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  const input = arr;
+  if (arr.length <= 1) {
+    return arr;
+  }
+  const min = [];
+  const max = [];
+  for (let i = 1; i < arr.length; i += 1) {
+    if (arr[i] < arr[0]) {
+      min[min.length] = arr[i];
+    } else {
+      max[max.length] = arr[i];
+    }
+  }
+  const sorted = [...sortByAsc(min), arr[0], ...sortByAsc(max)];
+  for (let i = 0; i < arr.length; i += 1) {
+    input[i] = sorted[i];
+  }
+  return input;
 }
 
 /**
@@ -428,8 +445,26 @@ function sortByAsc(/* arr */) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  let result = str;
+  let iterationsLeft = 0;
+  for (let i = 0; i < iterations; i += 1) {
+    let even = '';
+    let odd = '';
+    for (let j = 0; j < result.length; j += 1) {
+      if (j % 2 === 0) {
+        even += result[j];
+      } else {
+        odd += result[j];
+      }
+    }
+    result = even + odd;
+    if (result === str) {
+      iterationsLeft = iterations % (i + 1);
+      i = iterations - iterationsLeft - 1;
+    }
+  }
+  return result;
 }
 
 /**
@@ -449,8 +484,28 @@ function shuffleChar(/* str, iterations */) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(number) {
+  const numArr = Array.from(`${number}`).map((item) => +item);
+  let i = numArr.length - 2;
+  for (i; i >= 0; i -= 1) {
+    if (numArr[i] < numArr[i + 1]) {
+      break;
+    }
+  }
+  if (i) {
+    let idx = i + 1;
+    for (let j = idx; j < numArr.length; j += 1) {
+      if (numArr[j] < numArr[idx] && numArr[j] > numArr[i]) {
+        idx = j;
+      }
+    }
+    [numArr[i], numArr[idx]] = [numArr[idx], numArr[i]];
+    const before = numArr.splice(0, i + 1);
+    const after = numArr;
+    const result = +[...before, ...after.sort((a, b) => a - b)].join('');
+    return result;
+  }
+  return number;
 }
 
 module.exports = {
